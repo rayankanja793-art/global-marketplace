@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B4FD8">
+  <title>Offline | Global-ServiceMarket</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f7fc;
+      color: #172033;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    main {
+      max-width: 440px;
+      background: white;
+      padding: 40px 28px;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+    h1 { color: #0B4FD8; }
+    p { line-height: 1.7; color: #536078; }
+    button {
+      background: #0B4FD8;
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 22px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Global-ServiceMarket</h1>
+    <h2>You are currently offline</h2>
+    <p>Please check your internet connection. You can return to Global-ServiceMarket when you are connected again.</p>
+    <button onclick="window.location.reload()">Try Again</button>
+  </main>
+</body>
+</html>

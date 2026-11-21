@@ -13,9 +13,13 @@ export default function Home() {
     <main className="min-h-screen bg-white text-slate-900">
       <header className="border-b border-slate-100">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <a href="/" className="text-2xl font-extrabold tracking-tight text-blue-700">
-            SERVICE<span className="text-slate-900">MARKET</span>
-          </a>
+          <a href="/" className="flex items-center gap-3">
+  <img
+    src="/global-servicemarket-logo.png"
+    alt="Global-ServiceMarket"
+    className="h-14 w-auto object-contain"
+  />
+</a>
 
           <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
             <a href="#categories" className="hover:text-blue-700">Explore services</a>
