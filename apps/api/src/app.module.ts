@@ -1,4 +1,4 @@
-
+﻿
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -20,7 +20,7 @@ import { AdminController } from './admin/admin.controller.js';
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 10,
+        limit: 100,
       },
     ]),
   ],
@@ -39,3 +39,4 @@ import { AdminController } from './admin/admin.controller.js';
   ],
 })
 export class AppModule {}
+

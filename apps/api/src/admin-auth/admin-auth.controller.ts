@@ -1,4 +1,4 @@
-
+﻿
 import {
   Body,
   Controller,
@@ -11,7 +11,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { AdminAuthService } from './admin-auth.service.js';
 import { AdminSessionService } from './admin-session.service.js';
@@ -59,6 +59,7 @@ export class AdminAuthController {
     );
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
@@ -101,3 +102,4 @@ export class AdminAuthController {
     );
   }
 }
+
