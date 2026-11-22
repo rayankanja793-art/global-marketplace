@@ -4,13 +4,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const stats = [
-  { label: "Total Customers", value: "0", icon: "👥" },
-  { label: "Service Providers", value: "0", icon: "🧑‍🔧" },
-  { label: "Total Bookings", value: "0", icon: "📅" },
-  { label: "Platform Revenue", value: "KSh 0", icon: "💰" },
-];
-
 const sections = [
   { name: "Users & Accounts", description: "Manage customers and account access", icon: "👥" },
   { name: "Service Providers", description: "Manage individuals, businesses and branches", icon: "🧑‍🔧" },
@@ -36,13 +29,44 @@ export default function AdminPage() {
   const router = useRouter();
 
   const [admin, setAdmin] = useState<Admin | null>(null);
+  const [totalProviders, setTotalProviders] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [providerPhone, setProviderPhone] = useState("");
   const [linkingProvider, setLinkingProvider] = useState(false);
   const [linkMessage, setLinkMessage] = useState("");
   const [linkError, setLinkError] = useState("");
+  const stats = [
+    { label: "Total Customers", value: "0", icon: "👥" },
+    { label: "Service Providers", value: totalProviders.toLocaleString(), icon: "🧑‍🔧" },
+    { label: "Total Bookings", value: "0", icon: "📅" },
+    { label: "Platform Revenue", value: "KSh 0", icon: "💰" },
+  ];
 
+  useEffect(() => {
+    async function loadDashboardStats() {
+      try {
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+        const response = await fetch(`${apiUrl}/api/admin/dashboard/stats`, {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        });
+
+        if (!response.ok) return;
+
+        const result = await response.json();
+        setTotalProviders(Number(result.totalProviders ?? 0));
+      } catch {
+        console.error("Unable to load dashboard statistics.");
+      }
+    }
+
+    loadDashboardStats();
+  }, []);
   useEffect(() => {
     let active = true;
 

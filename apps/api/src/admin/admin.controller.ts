@@ -30,6 +30,18 @@ export class AdminController {
     };
   }
 
+  @Get('dashboard/stats')
+  async getDashboardStats() {
+    const result = await this.database.query(
+      `SELECT COUNT(*)::int AS total_providers
+       FROM providers
+       WHERE is_active = TRUE`,
+    );
+
+    return {
+      totalProviders: Number(result.rows[0]?.total_providers ?? 0),
+    };
+  }
   @Post('providers/link')
   async linkProvider(
     @Body() body: { phone?: string },
