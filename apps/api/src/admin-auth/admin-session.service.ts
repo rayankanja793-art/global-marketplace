@@ -23,7 +23,7 @@ export class AdminSessionService {
     return {
       httpOnly: true,
       secure: this.config.get('NODE_ENV') === 'production',
-      sameSite: 'strict' as const,
+     sameSite: 'none' as const,
       path: '/api/admin',
       maxAge: SESSION_DURATION_MS,
     };
