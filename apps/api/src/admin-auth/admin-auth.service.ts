@@ -1,4 +1,3 @@
-
 import {
   ConflictException,
   Injectable,
@@ -127,6 +126,15 @@ export class AdminAuthService {
   }
 
   async verifyAdminLogin(email: string, password: string) {
+    if (
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !email.trim() ||
+      !password
+    ) {
+      throw new UnauthorizedException('Invalid email or password.');
+    }
+
     const normalizedEmail = email.trim().toLowerCase();
 
     const result = await this.database.query(
