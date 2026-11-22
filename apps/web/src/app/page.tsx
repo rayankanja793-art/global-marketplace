@@ -1,11 +1,11 @@
-
+﻿
 const categories = [
-  { icon: "🏠", name: "Home Services", description: "Repairs, cleaning and maintenance" },
-  { icon: "💇", name: "Beauty & Wellness", description: "Salons, spas and personal care" },
-  { icon: "🚗", name: "Automotive", description: "Mechanics, car wash and repairs" },
-  { icon: "🎉", name: "Events", description: "Planning, photography and catering" },
-  { icon: "📚", name: "Education", description: "Tutors, training and lessons" },
-  { icon: "💼", name: "Professional Services", description: "Business and expert services" }
+  { icon: "ðŸ ", name: "Home Services", description: "Repairs, cleaning and maintenance" },
+  { icon: "ðŸ’‡", name: "Beauty & Wellness", description: "Salons, spas and personal care" },
+  { icon: "ðŸš—", name: "Automotive", description: "Mechanics, car wash and repairs" },
+  { icon: "ðŸŽ‰", name: "Events", description: "Planning, photography and catering" },
+  { icon: "ðŸ“š", name: "Education", description: "Tutors, training and lessons" },
+  { icon: "ðŸ’¼", name: "Professional Services", description: "Business and expert services" }
 ];
 
 export default function Home() {
@@ -36,7 +36,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </header>
+      <a href="/admin/login" className="rounded-lg bg-black px-4 py-2 text-white">Admin Login</a></header>
 
       <section className="bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 px-6 py-24 text-white">
         <div className="mx-auto max-w-5xl text-center">
@@ -100,7 +100,7 @@ export default function Home() {
             </p>
           </div>
           <a href="#categories" className="font-semibold text-blue-700 hover:underline">
-            Explore all categories →
+            Explore all categories â†’
           </a>
         </div>
 
@@ -118,7 +118,7 @@ export default function Home() {
                 {category.description}
               </p>
               <span className="mt-5 inline-block font-semibold text-blue-700">
-                Explore category →
+                Explore category â†’
               </span>
             </article>
           ))}
@@ -165,10 +165,11 @@ export default function Home() {
 
       <footer className="border-t border-slate-200 px-6 py-8">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-4 text-sm text-slate-500">
-          <p>© 2026 ServiceMarket. All rights reserved.</p>
+          <p>Â© 2026 ServiceMarket. All rights reserved.</p>
           <p>Discover. Connect. Book.</p>
         </div>
       </footer>
     </main>
   );
 }
+
