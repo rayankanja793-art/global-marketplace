@@ -1,12 +1,13 @@
 
 import {
   Injectable,
+  HttpException,
   OnModuleDestroy,
   OnModuleInit,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Pool, QueryResult, QueryResultRow } from 'pg';
+import { Pool, type PoolClient, QueryResult, QueryResultRow } from 'pg';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
@@ -150,6 +151,34 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     await this.pool.end();
   }
 
+  async transaction<T>(
+    operation: (client: PoolClient) => Promise<T>,
+  ): Promise<T> {
+    const client = await this.pool.connect();
+
+    try {
+      await client.query('BEGIN');
+      const result = await operation(client);
+      await client.query('COMMIT');
+      return result;
+    } catch (error) {
+      try {
+        await client.query('ROLLBACK');
+      } catch {
+        // Preserve the generic database error response.
+      }
+
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new ServiceUnavailableException(
+        'The database transaction could not be completed.',
+      );
+    } finally {
+      client.release();
+    }
+  }
   async query<T extends QueryResultRow = QueryResultRow>(
     sql: string,
     values: unknown[] = [],

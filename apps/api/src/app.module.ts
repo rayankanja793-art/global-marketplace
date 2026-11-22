@@ -12,9 +12,11 @@ import { AdminAuthGuard } from './admin-auth/admin-auth.guard.js';
 import { SuperAdminGuard } from './admin-auth/super-admin.guard.js';
 import { AdminController } from './admin/admin.controller.js';
 import { ProvidersModule } from './providers/providers.module.js';
+import { LocationsModule } from './locations/locations.module.js';
 
 @Module({
   imports: [
+    LocationsModule,
     ProvidersModule,
     DatabaseModule,
     ConfigModule.forRoot({
