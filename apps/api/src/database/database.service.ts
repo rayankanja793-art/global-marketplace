@@ -76,6 +76,64 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       CREATE INDEX IF NOT EXISTS admin_sessions_expires_at_idx
       ON admin_sessions(expires_at);
     `);
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS providers (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        account_type TEXT NOT NULL
+          CHECK (account_type IN ('individual', 'business')),
+        full_name TEXT NOT NULL,
+        business_name TEXT,
+        email TEXT UNIQUE,
+        phone TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        profile_description TEXT,
+        county TEXT,
+        town TEXT,
+        is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS provider_sessions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+        token_hash CHAR(64) NOT NULL UNIQUE,
+        expires_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE INDEX IF NOT EXISTS provider_sessions_provider_id_idx
+      ON provider_sessions(provider_id);
+    `);
+
+    await this.pool.query(`
+      CREATE INDEX IF NOT EXISTS provider_sessions_expires_at_idx
+      ON provider_sessions(expires_at);
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS provider_business_members (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+        full_name TEXT NOT NULL,
+        email TEXT,
+        phone TEXT,
+        role TEXT NOT NULL DEFAULT 'employee'
+          CHECK (role IN ('owner', 'manager', 'receptionist', 'employee')),
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE INDEX IF NOT EXISTS provider_business_members_provider_id_idx
+      ON provider_business_members(provider_id);
+    `);
   }
 
   async onModuleDestroy(): Promise<void> {
