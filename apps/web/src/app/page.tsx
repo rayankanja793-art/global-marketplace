@@ -1,11 +1,11 @@
 ﻿
 const categories = [
-  { icon: "ðŸ ", name: "Home Services", description: "Repairs, cleaning and maintenance" },
-  { icon: "ðŸ’‡", name: "Beauty & Wellness", description: "Salons, spas and personal care" },
-  { icon: "ðŸš—", name: "Automotive", description: "Mechanics, car wash and repairs" },
-  { icon: "ðŸŽ‰", name: "Events", description: "Planning, photography and catering" },
-  { icon: "ðŸ“š", name: "Education", description: "Tutors, training and lessons" },
-  { icon: "ðŸ’¼", name: "Professional Services", description: "Business and expert services" }
+  { icon: "\u{1F6E0}", name: "Home Services", description: "Repairs, cleaning and maintenance" },
+  { icon: "\u{1F487}", name: "Beauty & Wellness", description: "Salons, spas and personal care" },
+  { icon: "\u{1F697}", name: "Automotive", description: "Mechanics, car wash and repairs" },
+  { icon: "\u{1F389}", name: "Events", description: "Planning, photography and catering" },
+  { icon: "\u{1F4DA}", name: "Education", description: "Tutors, training and lessons" },
+  { icon: "\u{1F4BC}", name: "Professional Services", description: "Business and expert services" }
 ];
 
 export default function Home() {
@@ -165,12 +165,14 @@ export default function Home() {
 
       <footer className="border-t border-slate-200 px-6 py-8">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-4 text-sm text-slate-500">
-          <p>Â© 2026 ServiceMarket. All rights reserved.</p>
+          <p>© 2026 Global-ServiceMarket. All rights reserved.</p>
           <p>Discover. Connect. Book.</p>
         </div>
       </footer>
     </main>
   );
 }
+
+
 
 
