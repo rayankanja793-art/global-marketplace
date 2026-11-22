@@ -36,7 +36,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      <a href="/admin/login" className="rounded-lg bg-black px-4 py-2 text-white">Admin Login</a></header>
+      </header>
 
       <section className="bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 px-6 py-24 text-white">
         <div className="mx-auto max-w-5xl text-center">
@@ -172,4 +172,5 @@ export default function Home() {
     </main>
   );
 }
+
 
