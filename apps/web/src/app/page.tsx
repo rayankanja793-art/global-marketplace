@@ -1,4 +1,4 @@
-﻿
+
 const categories = [
   { icon: "\u{1F6E0}", name: "Home Services", description: "Repairs, cleaning and maintenance" },
   { icon: "\u{1F487}", name: "Beauty & Wellness", description: "Salons, spas and personal care" },
@@ -24,16 +24,12 @@ export default function Home() {
           <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
             <a href="#categories" className="hover:text-blue-700">Explore services</a>
             <a href="#how-it-works" className="hover:text-blue-700">How it works</a>
-            <a href="#providers" className="hover:text-blue-700">Become a provider</a>
+            <a href="/provider/register" className="hover:text-blue-700">Become a provider</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <button className="hidden rounded-lg px-4 py-2 text-sm font-semibold hover:bg-slate-100 sm:block">
-              Sign in
-            </button>
-            <button className="rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-800">
-              Get started
-            </button>
+            <a href="/provider/login" className="hidden rounded-lg px-4 py-2 text-sm font-semibold hover:bg-slate-100 sm:block">Sign in</a>
+            <a href="/provider/register" className="rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-800">Get started</a>
           </div>
         </div>
       </header>
@@ -157,9 +153,7 @@ export default function Home() {
             Connect with customers, showcase your services, manage bookings
             and grow your business through our marketplace.
           </p>
-          <button className="mt-8 rounded-xl bg-white px-7 py-3.5 font-bold text-blue-950 hover:bg-blue-50">
-            Become a provider
-          </button>
+          <a href="/provider/register" className="mt-8 inline-block rounded-xl bg-white px-7 py-3.5 font-bold text-blue-950 hover:bg-blue-50">Become a provider</a>
         </div>
       </section>
 
@@ -172,7 +166,3 @@ export default function Home() {
     </main>
   );
 }
-
-
-
-

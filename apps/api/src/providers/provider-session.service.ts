@@ -1,4 +1,4 @@
-﻿import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes } from 'node:crypto';
 import type { Response } from 'express';
@@ -22,7 +22,7 @@ export class ProviderSessionService {
     return {
       httpOnly: true,
       secure: this.config.get('NODE_ENV') === 'production',
-      sameSite: 'none' as const,
+      sameSite: this.config.get('NODE_ENV') === 'production' ? 'none' as const : 'lax' as const,
       path: '/providers',
       maxAge: SESSION_DURATION_MS,
     };
@@ -77,7 +77,7 @@ export class ProviderSessionService {
     response.clearCookie(COOKIE_NAME, {
       httpOnly: true,
       secure: this.config.get('NODE_ENV') === 'production',
-      sameSite: 'none',
+      sameSite: this.config.get('NODE_ENV') === 'production' ? 'none' : 'lax',
       path: '/providers',
     });
 
