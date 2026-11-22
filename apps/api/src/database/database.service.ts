@@ -97,6 +97,16 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     `);
 
     await this.pool.query(`
+      ALTER TABLE providers
+      ADD COLUMN IF NOT EXISTS linked_admin_id UUID
+      REFERENCES administrators(id) ON DELETE SET NULL;
+    `);
+
+    await this.pool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS providers_linked_admin_id_unique
+      ON providers(linked_admin_id);
+    `);
+    await this.pool.query(`
       CREATE TABLE IF NOT EXISTS provider_sessions (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,

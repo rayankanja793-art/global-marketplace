@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ interface Provider {
   county?: string;
   town?: string;
   is_verified: boolean;
+  has_admin_access: boolean;
 }
 
 export default function ProviderDashboard() {
@@ -67,6 +68,36 @@ export default function ProviderDashboard() {
     };
   }, [apiUrl, router]);
 
+  const [adminAccessLoading, setAdminAccessLoading] = useState(false);
+  const [adminAccessError, setAdminAccessError] = useState("");
+
+  async function openAdminDashboard() {
+    setAdminAccessLoading(true);
+    setAdminAccessError("");
+
+    try {
+      const response = await fetch(`${apiUrl}/providers/admin-session`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Administrator access was denied.");
+      }
+
+      router.replace("/admin");
+    } catch (error) {
+      setAdminAccessError(
+        error instanceof Error
+          ? error.message
+          : "Unable to open the administrator dashboard."
+      );
+      setAdminAccessLoading(false);
+    }
+  }
+
   async function handleLogout() {
     try {
       await fetch(`${apiUrl}/providers/logout`, {
@@ -111,12 +142,28 @@ export default function ProviderDashboard() {
           <a href="/" className="text-xl font-extrabold text-blue-950">
             Global-ServiceMarket
           </a>
-          <button
-            onClick={handleLogout}
+          <div className="flex items-center gap-3">
+            {provider.has_admin_access === true && (
+              <button
+                onClick={openAdminDashboard}
+                disabled={adminAccessLoading}
+                className="rounded-lg bg-blue-800 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-900 disabled:opacity-60"
+              >
+                {adminAccessLoading ? "Opening..." : "Admin Dashboard"}
+              </button>
+            )}
+            {adminAccessError && (
+              <p className="text-sm text-red-600" role="alert">
+                {adminAccessError}
+              </p>
+            )}
+            <button
+              onClick={handleLogout}
             className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100"
           >
             Log out
-          </button>
+            </button>
+          </div>
         </div>
       </header>
 

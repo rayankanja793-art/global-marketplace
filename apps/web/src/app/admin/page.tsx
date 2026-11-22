@@ -38,6 +38,10 @@ export default function AdminPage() {
   const [admin, setAdmin] = useState<Admin | null>(null);
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [providerPhone, setProviderPhone] = useState("");
+  const [linkingProvider, setLinkingProvider] = useState(false);
+  const [linkMessage, setLinkMessage] = useState("");
+  const [linkError, setLinkError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -164,6 +168,62 @@ export default function AdminPage() {
           </header>
 
           <div className="p-5 md:p-8">
+            {admin.role === "super_admin" && (
+              <section className="mb-8 rounded-xl border border-[#806323] bg-[#141414] p-6">
+                <h3 className="text-lg font-bold text-[#e0bd55]">
+                  Designated Provider Administrator Access
+                </h3>
+                <p className="mt-2 text-sm text-gray-400">
+                  Link one registered provider account to your existing Super Administrator account.
+                </p>
+                <form
+                  className="mt-5 flex flex-col gap-3 sm:flex-row"
+                  onSubmit={async (event) => {
+                    event.preventDefault();
+                    setLinkingProvider(true);
+                    setLinkMessage("");
+                    setLinkError("");
+                    try {
+                      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+                      const response = await fetch(`${apiUrl}/api/admin/providers/link`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ phone: providerPhone.trim() }),
+                      });
+                      const result = await response.json();
+                      if (!response.ok) {
+                        throw new Error(result.message || "Unable to link provider.");
+                      }
+                      setLinkMessage(result.message || "Provider linked successfully.");
+                      setProviderPhone("");
+                    } catch (error) {
+                      setLinkError(error instanceof Error ? error.message : "Unable to link provider.");
+                    } finally {
+                      setLinkingProvider(false);
+                    }
+                  }}
+                >
+                  <input
+                    type="tel"
+                    value={providerPhone}
+                    onChange={(event) => setProviderPhone(event.target.value)}
+                    placeholder="Registered provider phone number"
+                    required
+                    className="min-w-0 flex-1 rounded-lg border border-[#493b1b] bg-[#080808] px-4 py-3 text-white"
+                  />
+                  <button
+                    type="submit"
+                    disabled={linkingProvider}
+                    className="rounded-lg bg-[#806323] px-5 py-3 font-semibold text-white disabled:opacity-50"
+                  >
+                    {linkingProvider ? "Linking..." : "Link Provider"}
+                  </button>
+                </form>
+                {linkMessage && <p className="mt-3 text-sm text-green-400" role="status">{linkMessage}</p>}
+                {linkError && <p className="mt-3 text-sm text-red-400" role="alert">{linkError}</p>}
+              </section>
+            )}
             <div className="mb-7">
               <h3 className="text-xl font-bold text-[#e0bd55]">
                 Platform Overview

@@ -9,6 +9,7 @@ import { AdminAuthController } from './admin-auth/admin-auth.controller.js';
 import { AdminAuthService } from './admin-auth/admin-auth.service.js';
 import { AdminSessionService } from './admin-auth/admin-session.service.js';
 import { AdminAuthGuard } from './admin-auth/admin-auth.guard.js';
+import { SuperAdminGuard } from './admin-auth/super-admin.guard.js';
 import { AdminController } from './admin/admin.controller.js';
 import { ProvidersModule } from './providers/providers.module.js';
 
@@ -33,10 +34,12 @@ import { ProvidersModule } from './providers/providers.module.js';
     AdminAuthService,
     AdminSessionService,
     AdminAuthGuard,
+    SuperAdminGuard,
   ],
   exports: [
     AdminSessionService,
     AdminAuthGuard,
+    SuperAdminGuard,
   ],
 })
 export class AppModule {}

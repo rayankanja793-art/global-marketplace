@@ -49,7 +49,14 @@ export class ProviderSessionService {
 
     const result = await this.database.query(
       `SELECT p.id, p.account_type, p.full_name, p.business_name,
-              p.email, p.phone, p.county, p.town, p.is_verified
+              p.email, p.phone, p.county, p.town, p.is_verified,
+              EXISTS (
+                SELECT 1
+                FROM administrators a
+                WHERE a.id = p.linked_admin_id
+                  AND a.role = 'super_admin'
+                  AND a.is_active = TRUE
+              ) AS has_admin_access
        FROM provider_sessions s
        JOIN providers p ON p.id = s.provider_id
        WHERE s.token_hash = $1

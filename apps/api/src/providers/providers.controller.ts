@@ -1,4 +1,4 @@
-﻿import {
+import {
   Body,
   Controller,
   Get,
@@ -12,6 +12,8 @@
 import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { ProvidersService } from './providers.service.js';
+import { AdminSessionService } from '../admin-auth/admin-session.service.js';
+import { DatabaseService } from '../database/database.service.js';
 import { ProviderSessionService } from './provider-session.service.js';
 import {
   ProviderLoginDto,
@@ -38,6 +40,8 @@ export class ProvidersController {
   constructor(
     private readonly providersService: ProvidersService,
     private readonly sessions: ProviderSessionService,
+    private readonly adminSessions: AdminSessionService,
+    private readonly database: DatabaseService,
   ) {}
 
   @Post('register')
@@ -71,6 +75,42 @@ export class ProvidersController {
     return this.sessions.validateSession(token);
   }
 
+  @Post('admin-session')
+  @HttpCode(HttpStatus.OK)
+  async createAdminSession(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const providerToken = getSessionToken(request);
+
+    if (!providerToken) {
+      throw new UnauthorizedException('Provider session required.');
+    }
+
+    const provider = await this.sessions.validateSession(providerToken);
+
+    const result = await this.database.query(
+      `SELECT a.id
+       FROM providers p
+       JOIN administrators a ON a.id = p.linked_admin_id
+       WHERE p.id = $1
+         AND a.role = 'super_admin'
+         AND a.is_active = TRUE
+       LIMIT 1`,
+      [provider.id],
+    );
+
+    if (result.rows.length === 0) {
+      throw new UnauthorizedException('This provider account is not authorized for administrator access.');
+    }
+
+    await this.adminSessions.createSession(result.rows[0].id, response);
+
+    return {
+      success: true,
+      message: 'Administrator session created.',
+    };
+  }
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(
