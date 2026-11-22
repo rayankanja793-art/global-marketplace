@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import ProviderLocationMap from "../../../components/ProviderLocationMap";
 import { useRouter } from "next/navigation";
 
 interface Provider {
@@ -41,6 +42,14 @@ export default function ProviderDashboard() {
   const [locationMessage, setLocationMessage] = useState("");
   const [savingLocation, setSavingLocation] = useState(false);
   const [primaryLocationLoading, setPrimaryLocationLoading] = useState("");
+  const latitudeInputRef = useRef<HTMLInputElement>(null);
+  const longitudeInputRef = useRef<HTMLInputElement>(null);
+
+  function handleMapLocationSelect(latitude: number, longitude: number) {
+    if (latitudeInputRef.current) latitudeInputRef.current.value = latitude.toFixed(6);
+    if (longitudeInputRef.current) longitudeInputRef.current.value = longitude.toFixed(6);
+    setLocationMessage("Map pin selected. Save the form to add this location.");
+  }
 
   const apiUrl =
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -451,6 +460,14 @@ export default function ProviderDashboard() {
             )}
           </div>
 
+          <div className="mt-8">
+            <h3 className="mb-3 font-semibold">Choose your location on the map</h3>
+            <ProviderLocationMap
+              locations={locations}
+              onLocationSelect={handleMapLocationSelect}
+            />
+          </div>
+
           <div className="mt-8 border-t border-slate-200 pt-7">
             <h3 className="font-semibold">Add another location</h3>
             <form onSubmit={handleAddLocation} className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -504,6 +521,7 @@ export default function ProviderDashboard() {
                   Latitude
                   <input
                     name="latitude"
+                    ref={latitudeInputRef}
                     type="number"
                     required
                     step="any"
@@ -517,6 +535,7 @@ export default function ProviderDashboard() {
                   Longitude
                   <input
                     name="longitude"
+                    ref={longitudeInputRef}
                     type="number"
                     required
                     step="any"
